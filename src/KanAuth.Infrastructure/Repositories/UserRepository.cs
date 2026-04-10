@@ -18,20 +18,20 @@ public class UserRepository : IUserRepository
         _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id, ct);
 
     public Task<User?> GetByEmailAsync(string email, CancellationToken ct = default) =>
-        _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email.ToLowerInvariant(), ct);
+        _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
 
     public Task<bool> EmailExistsAsync(string email, CancellationToken ct = default) =>
-        _db.Users.AnyAsync(u => u.Email == email.ToLowerInvariant(), ct);
+        _db.Users.AnyAsync(u => u.Email == email, ct);
 
-    public async Task AddAsync(User user, CancellationToken ct = default)
+    public Task AddAsync(User user, CancellationToken ct = default)
     {
         _db.Users.Add(user);
-        await _db.SaveChangesAsync(ct);
+        return Task.CompletedTask;
     }
 
-    public async Task UpdateAsync(User user, CancellationToken ct = default)
+    public Task UpdateAsync(User user, CancellationToken ct = default)
     {
         _db.Users.Update(user);
-        await _db.SaveChangesAsync(ct);
+        return Task.CompletedTask;
     }
 }

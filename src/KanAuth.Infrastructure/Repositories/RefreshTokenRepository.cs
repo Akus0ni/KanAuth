@@ -19,16 +19,16 @@ public class RefreshTokenRepository : IRefreshTokenRepository
             .Include(rt => rt.User)
             .FirstOrDefaultAsync(rt => rt.Token == token, ct);
 
-    public async Task AddAsync(RefreshToken token, CancellationToken ct = default)
+    public Task AddAsync(RefreshToken token, CancellationToken ct = default)
     {
         _db.RefreshTokens.Add(token);
-        await _db.SaveChangesAsync(ct);
+        return Task.CompletedTask;
     }
 
-    public async Task UpdateAsync(RefreshToken token, CancellationToken ct = default)
+    public Task UpdateAsync(RefreshToken token, CancellationToken ct = default)
     {
         _db.RefreshTokens.Update(token);
-        await _db.SaveChangesAsync(ct);
+        return Task.CompletedTask;
     }
 
     public async Task RevokeAllForUserAsync(Guid userId, string revokedByIp, CancellationToken ct = default)

@@ -1,9 +1,10 @@
+using KanAuth.Application.Interfaces;
 using KanAuth.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace KanAuth.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IUnitOfWork
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
