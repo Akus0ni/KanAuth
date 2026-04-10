@@ -1,5 +1,4 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using KanAuth.Application.DTOs.Responses;
@@ -46,6 +45,7 @@ public class TokenService : ITokenService
     }
 
     public RefreshToken GenerateRefreshToken(Guid userId, string ipAddress)
+
     {
         var randomBytes = RandomNumberGenerator.GetBytes(64);
         var token = Base64UrlEncoder.Encode(randomBytes);
@@ -59,32 +59,5 @@ public class TokenService : ITokenService
             ExpiresAtUtc = DateTime.UtcNow.AddDays(_jwt.RefreshTokenExpiryDays),
             CreatedByIp = ipAddress
         };
-    }
-
-    public ClaimsPrincipal? ValidateAccessToken(string token)
-    {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Secret));
-
-        var parameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = key,
-            ValidateIssuer = true,
-            ValidIssuer = _jwt.Issuer,
-            ValidateAudience = true,
-            ValidAudience = _jwt.Audience,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-
-        try
-        {
-            var handler = new JwtSecurityTokenHandler();
-            return handler.ValidateToken(token, parameters, out _);
-        }
-        catch
-        {
-            return null;
-        }
     }
 }

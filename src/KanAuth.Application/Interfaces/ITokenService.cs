@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using KanAuth.Application.DTOs.Responses;
 using KanAuth.Domain.Entities;
 
@@ -8,5 +7,4 @@ public interface ITokenService
 {
     AccessTokenResult GenerateAccessToken(User user);
     RefreshToken GenerateRefreshToken(Guid userId, string ipAddress);
-    ClaimsPrincipal? ValidateAccessToken(string token);
 }

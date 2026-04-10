@@ -18,7 +18,7 @@ public class UserRepository : IUserRepository
         _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id, ct);
 
     public Task<User?> GetByEmailAsync(string email, CancellationToken ct = default) =>
-        _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
+        _db.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
 
     public Task<bool> EmailExistsAsync(string email, CancellationToken ct = default) =>
         _db.Users.AnyAsync(u => u.Email == email, ct);
@@ -31,7 +31,8 @@ public class UserRepository : IUserRepository
 
     public Task UpdateAsync(User user, CancellationToken ct = default)
     {
-        _db.Users.Update(user);
+        if (_db.Entry(user).State == EntityState.Detached)
+            _db.Users.Update(user);
         return Task.CompletedTask;
     }
 }
