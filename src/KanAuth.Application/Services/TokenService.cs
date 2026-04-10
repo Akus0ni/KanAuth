@@ -45,19 +45,11 @@ public class TokenService : ITokenService
     }
 
     public RefreshToken GenerateRefreshToken(Guid userId, string ipAddress)
-
     {
         var randomBytes = RandomNumberGenerator.GetBytes(64);
         var token = Base64UrlEncoder.Encode(randomBytes);
+        var expiresAt = DateTime.UtcNow.AddDays(_jwt.RefreshTokenExpiryDays);
 
-        return new RefreshToken
-        {
-            Id = Guid.NewGuid(),
-            UserId = userId,
-            Token = token,
-            CreatedAtUtc = DateTime.UtcNow,
-            ExpiresAtUtc = DateTime.UtcNow.AddDays(_jwt.RefreshTokenExpiryDays),
-            CreatedByIp = ipAddress
-        };
+        return RefreshToken.Create(userId, token, expiresAt, ipAddress);
     }
 }
