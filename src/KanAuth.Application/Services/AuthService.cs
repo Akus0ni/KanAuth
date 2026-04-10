@@ -12,15 +12,18 @@ public class AuthService : IAuthService
     private readonly IUserRepository _users;
     private readonly IRefreshTokenRepository _refreshTokens;
     private readonly ITokenService _tokenService;
+    private readonly IUnitOfWork _uow;
 
     public AuthService(
         IUserRepository users,
         IRefreshTokenRepository refreshTokens,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IUnitOfWork uow)
     {
         _users = users;
         _refreshTokens = refreshTokens;
         _tokenService = tokenService;
+        _uow = uow;
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest req, string ip, CancellationToken ct = default)
@@ -65,6 +68,7 @@ public class AuthService : IAuthService
         token.RevokedAtUtc = DateTime.UtcNow;
         token.RevokedByIp = ip;
         await _refreshTokens.UpdateAsync(token, ct);
+        await _uow.SaveChangesAsync(ct);
     }
 
     public async Task<AuthResponse> RefreshTokenAsync(string refreshToken, string ip, CancellationToken ct = default)
@@ -91,6 +95,7 @@ public class AuthService : IAuthService
 
         await _refreshTokens.UpdateAsync(token, ct);
         await _refreshTokens.AddAsync(newRefreshToken, ct);
+        await _uow.SaveChangesAsync(ct);
 
         var accessToken = _tokenService.GenerateAccessToken(user);
 
@@ -116,6 +121,7 @@ public class AuthService : IAuthService
         var refreshToken = _tokenService.GenerateRefreshToken(user.Id, ip);
 
         await _refreshTokens.AddAsync(refreshToken, ct);
+        await _uow.SaveChangesAsync(ct);
 
         return new AuthResponse(
             accessToken.Token,

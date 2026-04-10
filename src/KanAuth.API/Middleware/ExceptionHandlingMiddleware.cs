@@ -34,8 +34,6 @@ public class ExceptionHandlingMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        _logger.LogError(exception, "Unhandled exception: {Message}", exception.Message);
-
         var (statusCode, title, detail) = exception switch
         {
             InvalidCredentialsException => (401, "Unauthorized", exception.Message),
@@ -48,6 +46,12 @@ public class ExceptionHandlingMiddleware
                 ? "An unexpected error occurred."
                 : exception.Message)
         };
+
+        if (statusCode == 500)
+            _logger.LogError(exception, "Unhandled exception on {Method} {Path}", context.Request.Method, context.Request.Path);
+        else
+            _logger.LogWarning("Request failed with {StatusCode}: {Message} on {Method} {Path}",
+                statusCode, exception.Message, context.Request.Method, context.Request.Path);
 
         context.Response.ContentType = "application/problem+json";
         context.Response.StatusCode = statusCode;
