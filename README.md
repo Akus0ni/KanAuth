@@ -68,6 +68,14 @@ Both can be used together — they're additive.
 - At least one digit
 - At least one special character
 
+## Running Tests
+
+```bash
+dotnet test tests/KanAuth.Tests
+```
+
+59 tests across four suites: `AuthService`, `TokenService`, `RegisterRequestValidator`, and `ExceptionHandlingMiddleware`. Uses xUnit + NSubstitute + FluentAssertions. No database required — all infrastructure dependencies are mocked.
+
 ## EF Core Migrations
 
 ```bash
