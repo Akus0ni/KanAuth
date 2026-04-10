@@ -1,0 +1,27 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+
+## EF Core
+*.db
+*.db-shm
+*.db-wal
+
+## Secrets / env
+.env
+.env.*
+appsettings.Local.json
+
+## Docker
+docker-compose.override.yml
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Publish output
+publish/

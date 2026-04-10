@@ -1,0 +1,11 @@
+**/.git
+**/.gitignore
+**/bin
+**/obj
+**/*.md
+**/*.user
+**/*.suo
+**/.vs
+**/node_modules
+**/.env
+**/kanauth.db

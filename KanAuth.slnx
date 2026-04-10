@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/KanAuth.API/KanAuth.API.csproj" />
+    <Project Path="src/KanAuth.Application/KanAuth.Application.csproj" />
+    <Project Path="src/KanAuth.Domain/KanAuth.Domain.csproj" />
+    <Project Path="src/KanAuth.Infrastructure/KanAuth.Infrastructure.csproj" />
+  </Folder>
+</Solution>

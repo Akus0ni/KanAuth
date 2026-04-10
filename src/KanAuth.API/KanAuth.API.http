@@ -1,0 +1,6 @@
+@KanAuth.API_HostAddress = http://localhost:5244
+
+GET {{KanAuth.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

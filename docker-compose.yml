@@ -1,0 +1,34 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Database__Provider: postgresql
+      Database__AutoMigrate: "true"
+      ConnectionStrings__DefaultConnection: >-
+        Host=db;Port=5432;Database=kanauth;Username=kanauth;Password=kanauth_dev
+      Jwt__Secret: "${JWT_SECRET:-dev-secret-change-in-prod-use-32-chars}"
+      Jwt__Issuer: KanAuth
+      Jwt__Audience: KanAuth.Clients
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: kanauth
+      POSTGRES_USER: kanauth
+      POSTGRES_PASSWORD: kanauth_dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kanauth"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
