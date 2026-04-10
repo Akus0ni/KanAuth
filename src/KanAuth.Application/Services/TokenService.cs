@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using KanAuth.Application.DTOs.Responses;
 using KanAuth.Application.Interfaces;
 using KanAuth.Application.Settings;
 using KanAuth.Domain.Entities;
@@ -19,10 +20,11 @@ public class TokenService : ITokenService
         _jwt = jwtOptions.Value;
     }
 
-    public string GenerateAccessToken(User user)
+    public AccessTokenResult GenerateAccessToken(User user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var expiresAt = DateTime.UtcNow.AddMinutes(_jwt.AccessTokenExpiryMinutes);
 
         var claims = new[]
         {
@@ -37,10 +39,10 @@ public class TokenService : ITokenService
             issuer: _jwt.Issuer,
             audience: _jwt.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwt.AccessTokenExpiryMinutes),
+            expires: expiresAt,
             signingCredentials: creds);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return new AccessTokenResult(new JwtSecurityTokenHandler().WriteToken(token), expiresAt);
     }
 
     public RefreshToken GenerateRefreshToken(Guid userId, string ipAddress)

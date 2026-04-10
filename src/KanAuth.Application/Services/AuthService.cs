@@ -95,9 +95,9 @@ public class AuthService : IAuthService
         var accessToken = _tokenService.GenerateAccessToken(user);
 
         return new AuthResponse(
-            accessToken,
+            accessToken.Token,
             newRefreshToken.Token,
-            DateTime.UtcNow.AddMinutes(15),
+            accessToken.ExpiresAt,
             newRefreshToken.ExpiresAtUtc,
             ToUserDto(user));
     }
@@ -118,9 +118,9 @@ public class AuthService : IAuthService
         await _refreshTokens.AddAsync(refreshToken, ct);
 
         return new AuthResponse(
-            accessToken,
+            accessToken.Token,
             refreshToken.Token,
-            DateTime.UtcNow.AddMinutes(15),
+            accessToken.ExpiresAt,
             refreshToken.ExpiresAtUtc,
             ToUserDto(user));
     }
