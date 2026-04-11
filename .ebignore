@@ -1,0 +1,10 @@
+# Exclude local dev files from EB deployment bundle
+docker-compose.yml
+Dockerfile
+.env
+.env.*
+
+# Exclude source code (EB uses the ECR image via Dockerrun.aws.json)
+src/
+tests/
+learning/
