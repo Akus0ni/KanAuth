@@ -21,6 +21,12 @@ A structured, bottom-up guide to understanding this project by reading code and 
 
 Start at `00` and work forward. Each file builds on the previous.
 
+## Deep-Dive Sub-Guides
+
+| Folder | Topic |
+|--------|-------|
+| [`aws-deployment/`](aws-deployment/README.md) | How KanAuth is deployed to AWS — every service explained kid-friendly with alternatives |
+
 ## Key Files to Read in the Codebase
 
 After each learning file, open these corresponding source files:

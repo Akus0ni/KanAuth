@@ -26,5 +26,6 @@ USER appuser
 COPY --from=build /app/publish .
 
 EXPOSE 80
+ENV ASPNETCORE_HTTP_PORTS=80
 
 ENTRYPOINT ["dotnet", "KanAuth.API.dll", "--migrate"]
